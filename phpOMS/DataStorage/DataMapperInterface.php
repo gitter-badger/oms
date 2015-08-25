@@ -58,7 +58,7 @@ interface DataMapperInterface
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function list(\phpOMS\DataStorage\Database\Query\Builder $query);
+    public function list(\phpOMS\DataStorage\Database\Query\Builder $query, $account);
 
     /**
      * Populate data.
@@ -66,7 +66,7 @@ interface DataMapperInterface
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function populate($result);
+    public function populate(array $result);
 
     /**
      * Load.

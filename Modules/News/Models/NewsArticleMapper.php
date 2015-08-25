@@ -62,54 +62,58 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
      */
     public function create(\Modules\News\Models\NewsArticle $article) : bool 
     {
-        $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
-        $query->prefix($this->db->getPrefix())
-            ->insert(
-                'news_author', 
-                'news_title', 
-                'news_plain', 
-                'news_content', 
-                'news_type', 
-                'news_status', 
-                'news_featured', 
-                'news_lang', 
-                'news_created', 
-                'news_publish'
-            )
-            ->into($this->table)
-            ->values(
-                $article->getAuthor() ?? '', 
-                $article->getTitle() ?? '', 
-                $article->getPlain() ?? '', 
-                $article->getContent() ?? '',
-                $article->getType() ?? 0, 
-                $article->getStatus() ?? 0, 
-                $article->isFeatured() ?? false, 
-                $article->getLanguage() ?? 'en', 
-                $article->getCreated() ?? \DateTime('NOW'), 
-                $article->getPublish() ?? \DateTime('NOW')
-            );
+        try {
+            $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
+            $query->prefix($this->db->getPrefix())
+                ->insert(
+                    'news_author', 
+                    'news_title', 
+                    'news_plain', 
+                    'news_content', 
+                    'news_type', 
+                    'news_status', 
+                    'news_featured', 
+                    'news_lang', 
+                    'news_created', 
+                    'news_publish'
+                )
+                ->into($this->table)
+                ->values(
+                    $article->getAuthor() ?? '', 
+                    $article->getTitle() ?? '', 
+                    $article->getPlain() ?? '', 
+                    $article->getContent() ?? '',
+                    $article->getType() ?? 0, 
+                    $article->getStatus() ?? 0, 
+                    $article->isFeatured() ?? false, 
+                    $article->getLanguage() ?? 'en', 
+                    $article->getCreated() ?? \DateTime('NOW'), 
+                    $article->getPublish() ?? \DateTime('NOW')
+                );
 
-        $this->db->con->prepare($query->toSql())->execute();
+            $this->db->con->prepare($query->toSql())->execute();
 
-        $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
-        $query->prefix($this->db->getPrefix())
-            ->insert(
-                'account_permission_account', 
-                'account_permission_from', 
-                'account_permission_for', 
-                'account_permission_id1', 
-                'account_permission_id2', 
-                'account_permission_r', 
-                'account_permission_w', 
-                'account_permission_m', 
-                'account_permission_d', 
-                'account_permission_p'
-            )
-            ->into('account_permission')
-            ->values($article->getAuthor(), 'news', 'news', 1, 1, 1, 1, 1, 1);
+            $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
+            $query->prefix($this->db->getPrefix())
+                ->insert(
+                    'account_permission_account', 
+                    'account_permission_from', 
+                    'account_permission_for', 
+                    'account_permission_id1', 
+                    'account_permission_id2', 
+                    'account_permission_r', 
+                    'account_permission_w', 
+                    'account_permission_m', 
+                    'account_permission_d', 
+                    'account_permission_p'
+                )
+                ->into('account_permission')
+                ->values($article->getAuthor(), 'news', 'news', 1, $this->db->con->lastInsertId(), 1, 1, 1, 1, 1);
 
-        $this->db->con->prepare($query->toSql())->execute();
+            $this->db->con->prepare($query->toSql())->execute();
+        } catch(\Exception $e) {
+            return false;
+        }
 
         return true;
     }
@@ -124,12 +128,12 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
         return $articles;
     }
 
-    public function populate(array $data) : \Modules\News\Models\NewsArticle
+    public function populate(array $result) : \Modules\News\Models\NewsArticle
     {
         $article = new \Modules\News\Models\NewsArticle();
 
         foreach($data as $column => $value) {
-            $article->{'set' . ucfirst($this->columns[$column]['internal'])}($value)
+            $article->{'set' . ucfirst($this->columns[$column]['internal'])}($value);
         }
 
         return $article;
