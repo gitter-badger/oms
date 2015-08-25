@@ -1,1 +1,57 @@
+# General
 
+The Orange Management software is a modular web application for small to mid sized companies, educational facilities and health care institutions. The Orange Management software modules can be split into the following different categories:
+
+* General
+* Business
+* Education
+* Health Care
+
+There is no limitation on how to combine modules. The modules are structured in a way that there is a minimum amount of dependencies between modules. Often modules provide additional functionality for other modules or modules request features from existing modules. Only in a few cases modules require another module for it's functionallity, this is usually only the case for core modules or modules that have a strong relation to an other module.
+
+Thanks to the modular strucuture it's easy to have full control over the costs and keep the functionallity to the exact amount that is needed. There is no fear of having too many functions that reduce the usability if they are not needed. This also results in a fast environment not just because only the necessary parts get installed but also because the core is built for a good experience in terms of performance.
+
+## Pricing & Services
+
+The current pricing model is single payment for the core application and modules. All updates regarding security and software fixes are free for the core application and all modules. Only enhancements, visually and in terms of functionallity require a one time payment for that update. This way it's also possible to have full control over software changes and their costs. For convenience reasons Orange Management Solutions also offers various module bundels and upgrade subscriptions for updates during that subscription.
+
+Additional optional services Orange Management Solutions provides are:
+
+* Initial software setup with all purchased modules
+* Regular maintenance
+* Customization of all modules provided by Orange Management Solutions
+* Hosting
+
+## Development Status
+
+Currently Orange Managemen Solutions is still fully developing the first Alpha version. As soon as we have a running Beta version we are allowing external testers to use our software and a selected amount of inhouse developed modules. A first RC version with a handful of modules is expected to be ready by the end of 2015.
+
+## Jobs
+
+We are always looking for people that are interested in joining this project. Unfortunately our current financial situation doesn't leave any room for payed staff members. All we can offer right now is a share of our future income and a great time. We are looking for:
+
+* PHP developer
+* JavaScript developer
+* Frontend developer
+* Designer
+
+Are you interested in joining us? Feel free to contact us at spl1nes.com@gmail.com.
+
+## Overview
+
+* Project: Orange Management
+* Group: Orange Management Solutions
+* Developers: 1
+* Languages: PHP, JS, Java, HTML, CSS
+* Dependencies: d3.js, THREE.js, tcpdf, PhpExcel
+* [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/spl1nes/Orange-Management?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge)
+
+## Live
+
+[![Build Status](https://travis-ci.org/spl1nes/Orange-Management.svg?branch=master)](https://travis-ci.org/spl1nes/Orange-Management) [![StyleCI](https://styleci.io/repos/22771663/shield)](https://styleci.io/repos/22771663) [![Dependency Status](https://www.versioneye.com/user/projects/55c5d46a65376200200034fb/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55c5d46a65376200200034fb) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spl1nes/Orange-Management/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spl1nes/Orange-Management/?branch=master)
+
+### Issues
+[![Stories in Pending](https://badge.waffle.io/spl1nes/orange-management.svg?label=ready&title=pending)](http://waffle.io/spl1nes/orange-management)
+[![Stories in Progress](https://badge.waffle.io/spl1nes/orange-management.svg?label=in%20progress&title=in%20progress)](http://waffle.io/spl1nes/orange-management)
+
+[![Throughput Graph](http://graphs.waffle.io/spl1nes/orange-management/throughput.svg)](https://waffle.io/spl1nes/orange-management/metrics)

@@ -1,0 +1,56 @@
+preset: psr1
+
+linting: false
+
+enabled:
+  - align_double_arrow
+  - align_equals
+  - braces
+  - concat_with_spaces
+  - duplicate_semicolon
+  - elseif
+  - eof_ending
+  - function_call_space
+  - function_declaration
+  - include
+  - indentation
+  - linefeed
+  - line_after_namespace
+  - list_commas
+  - lowercase_constants
+  - lowercase_keywords
+  - method_argument_space
+  - multiline_array_trailing_comma
+  - multiple_use
+  - namespace_no_leading_whitespace
+  - new_with_braces
+  - no_blank_lines_after_class_opening
+  - no_empty_lines_after_phpdocs
+  - object_operator
+  - operators_spaces
+  - ordered_use
+  - parenthesis
+  - phpdoc_align
+  - phpdoc_indent
+  - phpdoc_inline_tag
+  - phpdoc_scalar
+  - phpdoc_short_description
+  - phpdoc_trim
+  - phpdoc_type_to_var
+  - php_closing_tag
+  - php4_constructor
+  - self_accessor
+  - short_array_syntax
+  - single_line_after_imports
+  - single_quote
+  - spaces_before_semicolon
+  - spaces_cast
+  - ternary_spaces
+  - trailing_spaces
+  - visibility
+  - whitespacy_lines
+
+finder:
+  not-path:
+    - "*.tpl.php"
+    - "puphpet"

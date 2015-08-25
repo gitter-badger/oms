@@ -1,0 +1,72 @@
+<?php
+namespace Socket;
+
+/**
+ * Controller class.
+ *
+ * PHP Version 7.0
+ *
+ * @category   Framework
+ * @package    Framework
+ * @author     OMS Development Team <dev@oms.com>
+ * @author     Dennis Eichhorn <d.eichhorn@oms.com>
+ * @copyright  2013
+ * @license    OMS License 1.0
+ * @version    1.0.0
+ * @link       http://orange-management.com
+ * @since      1.0.0
+ */
+class SocketApplication extends \phpOMS\ApplicationAbstract
+{
+    /**
+     * Socket type.
+     *
+     * @var \phpOMS\Socket\SocketType
+     * @since 1.0.0
+     */
+    private $type;
+
+    /**
+     * Constructor.
+     *
+     * @param array  $config Core config
+     * @param string $type   Socket type
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function __construct(array $config, string $type)
+    {
+        $this->type = $type;
+        $socket     = null;
+
+        if ($type === \phpOMS\Socket\SocketType::SERVER) {
+            $this->dbPool = new \phpOMS\DataStorage\Database\Pool();
+            $this->dbPool->create('core', $config['db']);
+
+            $this->cacheManager   = new \phpOMS\DataStorage\Cache\CacheManager($this->dbPool);
+            $this->appSettings    = new \Model\CoreSettings($this->dbPool->get());
+            $this->eventManager   = new \phpOMS\Event\EventManager();
+            $this->router         = new \phpOMS\Router\Router();
+            $this->sessionManager = new \phpOMS\DataStorage\Session\HttpSession(36000);
+            $this->moduleManager  = new \phpOMS\Module\ModuleManager($this);
+            $this->l11nManager    = new \phpOMS\Localization\L11nManager();
+            $this->accountManager = new \phpOMS\Account\AccountManager();
+            $this->dispatcher     = new \phpOMS\Dispatcher\Dispatcher($this);
+
+            $modules = $this->moduleManager->getActiveModules();
+            $this->moduleManager->initModule($modules);
+
+            $socket = new \phpOMS\Socket\Server\Server($this);
+            $socket->create('127.0.0.1', $config['socket']['port']);
+            $socket->setLimit($config['socket']['limit']);
+        } elseif ($type === \phpOMS\Socket\SocketType::CLIENT) {
+            $socket = new \phpOMS\Socket\Client\Client();
+            $socket->create('127.0.0.1', $config['socket']['port']);
+        } else {
+            exit('Unknown socket type');
+        }
+
+        $socket->run();
+    }
+}

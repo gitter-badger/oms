@@ -1,0 +1,45 @@
+[
+    {
+        "id": 1002601001,
+        "pid": "754a08ddf8bcb1cf22f310f09206dd783d42f7dd",
+        "type": 2,
+        "subtype": 0,
+        "name": "Accounting",
+        "uri": null,
+        "icon": "fa fa-book",
+        "order": 50,
+        "from": 1002600000,
+        "permission": null,
+        "parent": 0,
+        "children": [
+            {
+                "id": 1002602001,
+                "pid": "754a08ddf8bcb1cf22f310f09206dd783d42f7dd",
+                "type": 2,
+                "subtype": 1,
+                "name": "Accounts",
+                "uri": "/{/lang}/backend/accounting/account/impersonal/list.php",
+                "icon": null,
+                "order": 5,
+                "from": 1002600000,
+                "permission": null,
+                "parent": 1002601001,
+                "children": []
+            },
+            {
+                "id": 1002603001,
+                "pid": "754a08ddf8bcb1cf22f310f09206dd783d42f7dd",
+                "type": 2,
+                "subtype": 1,
+                "name": "BatchPostings",
+                "uri": "/{/lang}/backend/accounting/posting/batch/list.php",
+                "icon": null,
+                "order": 20,
+                "from": 1002600000,
+                "permission": null,
+                "parent": 1002601001,
+                "children": []
+            }
+        ]
+    }
+]

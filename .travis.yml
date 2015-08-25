@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - nightly
+
+before_script:
+  - composer self-update
+  - composer install --prefer-source --no-interaction --dev
+  - mysql -e 'create database orange_management;'
+  - psql -c 'create database orange_management;' -U postgres
+  - echo "USE mysql;\nUPDATE user SET password=PASSWORD('123456') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root
+
+services:
+  - memcached
+  - redis-server
+
+script: phpunit --configuration Tests/PHPUnit/phpunit_default.xml --coverage-text
+
+notifications:
+  email:
+    recipients:
+      - spl1nes.com@googlemail.com
+    on_success: never
+    on_failure: never
