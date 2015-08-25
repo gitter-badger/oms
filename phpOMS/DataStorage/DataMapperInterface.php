@@ -47,10 +47,12 @@ interface DataMapperInterface
     /**
      * Find data.
      *
+     * @param array $columns Columns
+     *
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function find();
+    public function find(...$columns);
 
     /**
      * List data.

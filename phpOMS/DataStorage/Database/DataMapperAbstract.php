@@ -101,10 +101,12 @@ class DataMapperAbstract implements \phpOMS\DataStorage\DataMapperInterface
     /**
      * Find data.
      *
+     * @param array $columns Columns
+     *
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function find()
+    public function find(...$columns)
     {
         $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
         $query->prefix($this->db->getPrefix());
@@ -114,7 +116,7 @@ class DataMapperAbstract implements \phpOMS\DataStorage\DataMapperInterface
                 throw new \Exception();
             }
 
-            $column = $this->columns[$column];
+            $column = $column;
         }
 
         return $query->select(...$columns)->from($table);
