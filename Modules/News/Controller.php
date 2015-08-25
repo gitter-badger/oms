@@ -156,7 +156,7 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
     {
         switch ($request->getMethod()) {
             case \phpOMS\Message\RequestMethod::POST:
-                $this->createNews(
+                $articleId = $this->createNews(
                     1, 
                     new \DateTime('NOW'),
                     new \DateTime('NOW'),
@@ -169,7 +169,9 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
                     (bool) $request->getData('featured')
                 );
 
-                //$response->get('GLOBAL')->add($request->__toString(), $created);
+                $notify = new \Model\Message\Notify();
+                $notify->setMessage((string) $articleId);
+                $response->set($request->__toString(), $notify);
                 break;
             default:
                 $response->setHeader('HTTP', 'HTTP/1.0 406 Not acceptable');
@@ -202,7 +204,7 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
         $newsArticle->setFeatured($articleElements[9]);
 
         $newsArticleMapper = new \Modules\News\Models\NewsArticleMapper($this->app->dbPool->get());
-        $newsArticleMapper->create($newsArticle);
+        return $newsArticleMapper->create($newsArticle);
     }
 
     public function getNewsList($filter, $limit, $offset = 0, $orderBy, $ordered) 

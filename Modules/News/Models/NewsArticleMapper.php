@@ -60,7 +60,7 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function create(\Modules\News\Models\NewsArticle $article) : bool 
+    public function create(\Modules\News\Models\NewsArticle $article)
     {
         try {
             $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
@@ -92,6 +92,7 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
                 );
 
             $this->db->con->prepare($query->toSql())->execute();
+            $articleId = $this->db->con->lastInsertId();
 
             $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
             $query->prefix($this->db->getPrefix())
@@ -108,14 +109,14 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
                     'account_permission_p'
                 )
                 ->into('account_permission')
-                ->values($article->getAuthor(), 'news', 'news', 1, $this->db->con->lastInsertId(), 1, 1, 1, 1, 1);
+                ->values($article->getAuthor(), 'news', 'news', 1, $articleId, 1, 1, 1, 1, 1);
 
             $this->db->con->prepare($query->toSql())->execute();
         } catch(\Exception $e) {
             return false;
         }
 
-        return true;
+        return $articleId;
     }
 
     public function list(\phpOMS\DataStorage\Database\Query\Builder $query, $account)
