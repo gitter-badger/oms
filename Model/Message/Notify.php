@@ -24,7 +24,7 @@ class Notify implements \phpOMS\Contract\RenderableInterface, \phpOMS\Contract\A
      * @var string
      * @since 1.0.0
      */
-    const TYPE = 'redirect';
+    const TYPE = 'notify';
 
     /**
      * Notification title.
@@ -144,7 +144,7 @@ class Notify implements \phpOMS\Contract\RenderableInterface, \phpOMS\Contract\A
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function toArray()
+    public function toArray() : array
     {
         return ['type'  => self::TYPE,
                 'time'  => $this->delay,
