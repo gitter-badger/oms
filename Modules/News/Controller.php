@@ -205,10 +205,10 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
         $newsArticleMapper->create($newsArticle);
     }
 
-    public function getNewsList($filter, $limit, $offset = 0, $orderBy, $ordered) 
+    public function getNewsListR($limit = 50, $offset = 0, $orderBy = 'news_created', $ordered = 'ASC', $account) 
     {
-        $newsArticleMapper->find('author', 'publish', 'title', 'status', 'type', 'featured')
-            ->where($filter)
+        $newsArticleMapper->find('news_author', 'news_publish', 'news_title')
+            ->where('oms_account_permission.account_permission_account', '=', $account->getId())
             ->orderBy($orderBy, $ordered)
             ->offset($offset)
             ->limit($limit);
