@@ -109,6 +109,8 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
                 $navigation = \Modules\Navigation\Models\Navigation::getInstance($request->getHash(), $this->app->dbPool);
                 $newsDashboard->addData('nav', $navigation->getNav());
                 echo $newsDashboard->render();
+
+                $this->getNewsListR($limit = 50, $offset = 0, $orderBy = 'news_created', $ordered = 'ASC', $this->app->accountManager->get($request->getAccount()));
                 break;
             case 'single':
                 $article = new \Modules\News\Models\Article($this->app->dbPool);
@@ -207,12 +209,18 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
         return $newsArticleMapper->create($newsArticle);
     }
 
-    public function getNewsListR($limit = 50, $offset = 0, $orderBy = 'news_created', $ordered = 'ASC', $account) 
+    public function getNewsListR($limit = 50, $offset = 0, $orderBy = 'news_created', $ordered = 'ASC', \phpOMS\Account\Account $account = null) 
     {
-        $newsArticleMapper->find('news_author', 'news_publish', 'news_title')
-            ->where('oms_account_permission.account_permission_account', '=', $account->getId())
+        $newsArticleMapper = new \Modules\News\Models\NewsArticleMapper($this->app->dbPool->get());
+        $query = $newsArticleMapper->find('news.news_id', 'news.news_author', 'news.news_publish', 'news.news_title')
             ->orderBy($orderBy, $ordered)
             ->offset($offset)
             ->limit($limit);
+
+        if(isset($account)) {
+            $query->where('account_permission.account_permission_account', '=', $account->getId());
+        }
+
+        var_dump($query->toSql());
     }
 }

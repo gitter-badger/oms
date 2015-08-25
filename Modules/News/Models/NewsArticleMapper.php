@@ -155,10 +155,12 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
     }
 
     public function find(...$columns) {
-        return parent::find(...$columns)->from('account_permission')
-            ->where('account_permission.account_permission_for', '=', 'news', 'AND')
-            ->where('account_permission.account_permission_id1', '=', 1, 'AND')
-            ->where('news.news_id', '=', $query->getPrefix() . 'account_permission.account_permission_id2', 'AND')
-            ->where('account_permission.account_permission_r', '=', 1, 'AND');
+        $query = parent::find(...$columns);
+
+        return $query->from('account_permission')
+            ->where('account_permission.account_permission_for', '=', 'news')
+            ->where('account_permission.account_permission_id1', '=', 1)
+            ->where('news.news_id', '=', new \phpOMS\DataStorage\Database\Query\Column('account_permission.account_permission_id2'))
+            ->where('account_permission.account_permission_r', '=', 1);
     }
 }

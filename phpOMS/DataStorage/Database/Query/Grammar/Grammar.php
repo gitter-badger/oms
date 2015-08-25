@@ -186,7 +186,7 @@ class Grammar extends \phpOMS\DataStorage\Database\Grammar
      */
     protected function compileSelects(\phpOMS\DataStorage\Database\Query\Builder $query, array $columns) : string
     {
-        $expression = $this->expressionizeSelect($columns);
+        $expression = $this->expressionizeSelect($columns, $query->getPrefix());
 
         if ($expression == '') {
             return '';
@@ -213,7 +213,7 @@ class Grammar extends \phpOMS\DataStorage\Database\Grammar
             if (is_string($element)) {
                 $expression .= $this->compileSystem($element, $prefix) . ', ';
             } elseif ($element instanceof \Closure) {
-                $expression .= $prefix . $element() . ', ';
+                $expression .= $element() . ', ';
             } elseif ($element instanceof \phpOMS\DataStorage\Database\Query\Builder) {
                 $expression .= $element->toSql() . ', ';
             } else {
@@ -269,7 +269,7 @@ class Grammar extends \phpOMS\DataStorage\Database\Grammar
                 }
 
                 if (is_string($element['column'])) {
-                    $expression .= $this->compileSystem($element['column'], $query->getPrefix()) . ' ' . strtoupper($element['operator']) . ' ' . $this->compileValue($element['value']);
+                    $expression .= $this->compileSystem($element['column'], $query->getPrefix()) . ' ' . strtoupper($element['operator']) . ' ' . $this->compileValue($element['value'], $query->getPrefix());
                 } elseif ($element['column'] instanceof \Closure) {
                 } elseif ($element['column'] instanceof \phpOMS\DataStorage\Database\Query\Builder) {
                 }
@@ -307,7 +307,7 @@ class Grammar extends \phpOMS\DataStorage\Database\Grammar
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    protected function compileValue($value) : string
+    protected function compileValue($value, $prefix = '') : string
     {
         if (is_string($value)) {
             return $this->valueQuotes . $value . $this->valueQuotes;
@@ -327,6 +327,8 @@ class Grammar extends \phpOMS\DataStorage\Database\Grammar
             return 'NULL';
         } elseif(is_bool($value)) {
             return (string) ((int) $value);
+        } elseif($value instanceof \phpOMS\DataStorage\Database\Query\Column) {
+            return $this->compileSystem($value->getColumn(), $prefix);
         }
     }
 

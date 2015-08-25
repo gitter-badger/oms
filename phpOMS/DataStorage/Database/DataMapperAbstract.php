@@ -111,15 +111,7 @@ class DataMapperAbstract implements \phpOMS\DataStorage\DataMapperInterface
         $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
         $query->prefix($this->db->getPrefix());
 
-        foreach($columns as &$column) {
-            if(!isset($this->columns[$column])) {
-                throw new \Exception();
-            }
-
-            $column = $column;
-        }
-
-        return $query->select(...$columns)->from($table);
+        return $query->select(...$columns)->from($this->table);
     }
 
     /**
