@@ -105,7 +105,7 @@ class Notify implements \phpOMS\Contract\RenderableInterface, \phpOMS\Contract\A
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function setLevel($level)
+    public function setLevel(int $level)
     {
         $this->level = $level;
     }
