@@ -156,7 +156,6 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
     {
         switch ($request->getMethod()) {
             case \phpOMS\Message\RequestMethod::POST:
-            var_dump($request->getData('featured'));
                 $this->createNews(
                     1, 
                     new \DateTime('NOW'),
