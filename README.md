@@ -51,7 +51,7 @@ Are you interested in joining us? Feel free to contact us at spl1nes.com@gmail.c
 [![Build Status](https://travis-ci.org/spl1nes/Orange-Management.svg?branch=master)](https://travis-ci.org/spl1nes/Orange-Management) [![StyleCI](https://styleci.io/repos/22771663/shield)](https://styleci.io/repos/22771663) [![Dependency Status](https://www.versioneye.com/user/projects/55c5d46a65376200200034fb/badge.svg?style=flat)](https://www.versioneye.com/user/projects/55c5d46a65376200200034fb) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spl1nes/Orange-Management/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/spl1nes/Orange-Management/?branch=master)
 
 ### Issues
-[![Stories in Pending](https://badge.waffle.io/spl1nes/orange-management.svg?label=ready&title=pending)](http://waffle.io/spl1nes/orange-management)
-[![Stories in Progress](https://badge.waffle.io/spl1nes/orange-management.svg?label=in%20progress&title=in%20progress)](http://waffle.io/spl1nes/orange-management)
+[![Stories in Pending](https://badge.waffle.io/spl1nes/oms.svg?label=ready&title=pending)](http://waffle.io/spl1nes/oms)
+[![Stories in Progress](https://badge.waffle.io/spl1nes/oms.svg?label=in%20progress&title=in%20progress)](http://waffle.io/spl1nes/oms)
 
-[![Throughput Graph](http://graphs.waffle.io/spl1nes/orange-management/throughput.svg)](https://waffle.io/spl1nes/orange-management/metrics)
+[![Throughput Graph](http://graphs.waffle.io/spl1nes/oms/throughput.svg)](https://waffle.io/spl1nes/oms/metrics)
