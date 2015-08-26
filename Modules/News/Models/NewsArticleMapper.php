@@ -10,6 +10,7 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
      * @since 1.0.0
      */
     protected $columns = [
+        'news_id' => ['name' => 'news_id', 'type' => 'string', 'internal' => 'id'],
         'news_author' => ['name' => 'news_author', 'type' => 'string', 'internal' => 'author'],
         'news_publish' => ['name' => 'news_publish', 'type' => 'DateTime', 'internal' => 'publish'],
         'news_title' => ['name' => 'news_title', 'type' => 'string', 'internal' => 'title'],
@@ -119,33 +120,50 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
         return $articleId;
     }
 
-    public function list(\phpOMS\DataStorage\Database\Query\Builder $query, $account)
-    {
-        $sth = $this->db->con->prepare($query->toSql())->execute();
-        $results = $result->fetchAll();
-
-        $articles = $this->populate($results);
-
-        return $articles;
-    }
-
+    /**
+     * Populate.
+     *
+     * @param array $result Query result set
+     *
+     * @return \Modules\News\Models\NewsArticle
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
     public function populate(array $result) : \Modules\News\Models\NewsArticle
     {
         $article = new \Modules\News\Models\NewsArticle();
 
-        foreach($data as $column => $value) {
-            $article->{'set' . ucfirst($this->columns[$column]['internal'])}($value);
+        foreach($result as $column => $value) {
+            if($this->columns[$column]['type'] === 'string' || $this->columns[$column]['type'] === 'int' || $this->columns[$column]['type'] === 'float') {
+                $article->{'set' . ucfirst($this->columns[$column]['internal'])}($value);
+            } elseif($this->columns[$column]['type'] === 'DateTime') {
+                $article->{'set' . ucfirst($this->columns[$column]['internal'])}(new \DateTime($value));
+            } else {
+                throw new \Exception();
+            }
         }
 
         return $article;
     }
 
+    /**
+     * Populate.
+     *
+     * @param array $result Query result set
+     *
+     * @return \Modules\News\Models\NewsArticle[]
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
     public function populateIterable(array $data) : array
     {
         $articles = [];
+
         foreach($data as $element) {
             if(isset($element['news_id'])) {
-                $articles[$element['news_id']] = $this->$this->populate($element);
+                $articles[$element['news_id']] = $this->populate($element);
             } else {
                 $articles[] = $this->populate($element);
             }
@@ -154,10 +172,19 @@ class NewsArticleMapper extends \phpOMS\DataStorage\Database\DataMapperAbstract
         return $articles;
     }
 
-    public function find(...$columns) {
-        $query = parent::find(...$columns);
-
-        return $query->from('account_permission')
+    /**
+     * Find.
+     *
+     * @param array $columns Columns to select
+     *
+     * @return \phpOMS\DataStorage\Database\Query\Builder
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function find(...$columns) : \phpOMS\DataStorage\Database\Query\Builder
+    {
+        return parent::find(...$columns)->from('account_permission')
             ->where('account_permission.account_permission_for', '=', 'news')
             ->where('account_permission.account_permission_id1', '=', 1)
             ->where('news.news_id', '=', new \phpOMS\DataStorage\Database\Query\Column('account_permission.account_permission_id2'))

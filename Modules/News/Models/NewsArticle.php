@@ -175,6 +175,17 @@ class NewsArticle
     }
 
     /**
+     * @param int $id Id
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * @return string
      *
      * @since  1.0.0

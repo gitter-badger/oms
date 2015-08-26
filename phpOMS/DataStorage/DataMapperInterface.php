@@ -49,26 +49,42 @@ interface DataMapperInterface
      *
      * @param array $columns Columns
      *
-     * @since  1.0.0
-     * @author Dennis Eichhorn <d.eichhorn@oms.com>
-     */
-    public function find(...$columns);
-
-    /**
-     * List data.
+     * @return \phpOMS\DataStorage\Database\Query\Builder
      *
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function list(\phpOMS\DataStorage\Database\Query\Builder $query, $account);
+    public function find(...$columns) : \phpOMS\DataStorage\Database\Query\Builder;
+
+    /**
+     * List data.
+     *
+     * @param \phpOMS\DataStorage\Database\Query\Builder $query Query
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function list(\phpOMS\DataStorage\Database\Query\Builder $query);
 
     /**
      * Populate data.
+     *
+     * @param array $result Result set
      *
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
     public function populate(array $result);
+
+    /**
+     * Populate data.
+     *
+     * @param array $result Result set
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function populateIterable(array $result) : array;
 
     /**
      * Load.
@@ -89,12 +105,4 @@ interface DataMapperInterface
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
     public function get($primaryKey);
-
-    /**
-     * Find all.
-     *
-     * @since  1.0.0
-     * @author Dennis Eichhorn <d.eichhorn@oms.com>
-     */
-    public function findAll();
 }

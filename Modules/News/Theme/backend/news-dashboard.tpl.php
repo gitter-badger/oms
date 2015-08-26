@@ -10,6 +10,9 @@ $nav->setTemplate('/Modules/Navigation/Theme/Backend/mid');
 $nav->setNav($this->getData('nav'));
 $nav->setLanguage($this->l11n->language);
 $nav->setParent(1000701001);
+
+$newsList = $this->getData('newsList');
+$headlineList = $this->getData('headlineList');
 ?>
 <?= $nav->render(); ?>
 
@@ -23,10 +26,15 @@ $nav->setParent(1000701001);
                 <i class="fa fa-minus min"></i>
                 <i class="fa fa-plus max vh"></i>
                 <tr>
-                    <th><?= $this->l11n->lang['News']['Type']; ?>
                     <th class="full lT"><?= $this->l11n->lang['News']['Title']; ?>
                     <th><?= $this->l11n->lang['News']['Author']; ?>
                     <th><?= $this->l11n->lang['News']['Date']; ?>
+                <?php foreach($newsList as $news) : ?>
+                    <tr>
+                        <th class="lT"><?= $news->getTitle(); ?>
+                        <th><?= $news->getAuthor(); ?>
+                        <th><?= $news->getPublish()->format('Y-m-d h:m:s'); ?>
+                <?php endforeach; ?>
         <tbody>
     </table>
 </div>
@@ -42,10 +50,15 @@ $nav->setParent(1000701001);
                 <i class="fa fa-plus max vh"></i>
 
                 <tr>
-                    <th><?= $this->l11n->lang['News']['Type']; ?>
                     <th class="full lT"><?= $this->l11n->lang['News']['Title']; ?>
                     <th><?= $this->l11n->lang['News']['Author']; ?>
                     <th><?= $this->l11n->lang['News']['Date']; ?>
+                <?php foreach($headlineList as $headline) : ?>
+                    <tr>
+                        <th class="lT"><?= $headline->getTitle(); ?>
+                        <th><?= $headline->getAuthor(); ?>
+                        <th><?= $headline->getPublish()->format('Y-m-d h:m:s'); ?>
+                <?php endforeach; ?>
         <tbody>
     </table>
 </div>

@@ -108,16 +108,23 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
 
                 $navigation = \Modules\Navigation\Models\Navigation::getInstance($request->getHash(), $this->app->dbPool);
                 $newsDashboard->addData('nav', $navigation->getNav());
-                echo $newsDashboard->render();
+            
+                $news = $this->getNewsListR($limit = 20, $offset = 0, $orderBy = 'news_publish', $ordered = 'DESC', $this->app->accountManager->get($request->getAccount()));
+                $headline = $this->getHeadlineListR($limit = 20, $offset = 0, $orderBy = 'news_publish', $ordered = 'ASC', $this->app->accountManager->get($request->getAccount()));
+                $newsDashboard->addData('newsList', $news);
+                $newsDashboard->addData('headlineList', $headline);
 
-                $this->getNewsListR($limit = 50, $offset = 0, $orderBy = 'news_created', $ordered = 'ASC', $this->app->accountManager->get($request->getAccount()));
+                echo $newsDashboard->render();
                 break;
             case 'single':
-                $article = new \Modules\News\Models\Article($this->app->dbPool);
-                $article->init($request->getData('id'));
+                $newsArticleView = new \phpOMS\Views\View($this->app, $request, $response);
+                $newsArticleView->setTemplate('/Modules/News/Theme/Backend/news-single');
 
-                /** @noinspection PhpIncludeInspection */
-                include __DIR__ . '/Theme/Backend/news-single.tpl.php';
+                $newsArticleMapper = new \Modules\News\Models\NewsArticleMapper($this->app->dbPool->get());
+                $article = $newsArticleMapper->get((int) $request->getData('id'));
+                $newsArticleView->addData('newsList', $article);
+
+                echo $newsArticleView->render();
                 break;
             case 'archive':
                 $newArchive = new \phpOMS\Views\View($this->app, $request, $response);
@@ -209,10 +216,20 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
         return $newsArticleMapper->create($newsArticle);
     }
 
-    public function getNewsListR($limit = 50, $offset = 0, $orderBy = 'news_created', $ordered = 'ASC', \phpOMS\Account\Account $account = null) 
+    /**
+     * Get Newslists
+     *
+     * @param array $articleElements Article elements
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function getNewsListR(int $limit = 50, int $offset = 0, string $orderBy = 'news_created', string $ordered = 'ASC', \phpOMS\Account\Account $account = null) 
     {
         $newsArticleMapper = new \Modules\News\Models\NewsArticleMapper($this->app->dbPool->get());
         $query = $newsArticleMapper->find('news.news_id', 'news.news_author', 'news.news_publish', 'news.news_title')
+            ->where('news.news_type', '=', 1)
+            ->where('news.news_status', '=', 1)
             ->orderBy($orderBy, $ordered)
             ->offset($offset)
             ->limit($limit);
@@ -221,6 +238,31 @@ class Controller extends \phpOMS\Module\ModuleAbstract implements \phpOMS\Module
             $query->where('account_permission.account_permission_account', '=', $account->getId());
         }
 
-        var_dump($query->toSql());
+        return $newsArticleMapper->populateIterable($newsArticleMapper->list($query));
+    }
+
+    /**
+     * Get Headlinelist
+     *
+     * @param array $articleElements Article elements
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function getHeadlineListR(int $limit = 50, int $offset = 0, string $orderBy = 'news_created', string $ordered = 'ASC', \phpOMS\Account\Account $account = null) 
+    {
+        $newsArticleMapper = new \Modules\News\Models\NewsArticleMapper($this->app->dbPool->get());
+        $query = $newsArticleMapper->find('news.news_id', 'news.news_author', 'news.news_publish', 'news.news_title')
+            ->where('news.news_type', '=', 0)
+            ->where('news.news_status', '=', 1)
+            ->orderBy($orderBy, $ordered)
+            ->offset($offset)
+            ->limit($limit);
+
+        if(isset($account)) {
+            $query->where('account_permission.account_permission_account', '=', $account->getId());
+        }
+
+        return $newsArticleMapper->populateIterable($newsArticleMapper->list($query));
     }
 }

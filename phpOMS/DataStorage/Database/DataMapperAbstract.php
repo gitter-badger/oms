@@ -103,10 +103,12 @@ class DataMapperAbstract implements \phpOMS\DataStorage\DataMapperInterface
      *
      * @param array $columns Columns
      *
+     * @return \phpOMS\DataStorage\Database\Query\Builder
+     *
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function find(...$columns)
+    public function find(...$columns) : \phpOMS\DataStorage\Database\Query\Builder
     {
         $query = new \phpOMS\DataStorage\Database\Query\Builder($this->db);
         $query->prefix($this->db->getPrefix());
@@ -117,23 +119,39 @@ class DataMapperAbstract implements \phpOMS\DataStorage\DataMapperInterface
     /**
      * Find data.
      *
+     * @param \phpOMS\DataStorage\Database\Query\Builder $query Query
+     *
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
-     */
-    public function list(\phpOMS\DataStorage\Database\Query\Builder $query, $account)
+ */
+    public function list(\phpOMS\DataStorage\Database\Query\Builder $query)
     {
+        $sth = $this->db->con->prepare($query->toSql());
+        $sth->execute();
+        $results = $sth->fetchAll(\PDO::FETCH_ASSOC);
 
+        return $results;
     }
 
     /**
      * Populate data.
      *
+     * @param array $result Result set
+     *
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function populate(array $result)
-    {
-    }
+    public function populate(array $result) {}
+
+    /**
+     * Populate data.
+     *
+     * @param array $result Result set
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function populateIterable(array $result) : array {}
 
     /**
      * Load.
@@ -157,24 +175,39 @@ class DataMapperAbstract implements \phpOMS\DataStorage\DataMapperInterface
      */
     public function get($primaryKey)
     {
+        $query = (new \phpOMS\DataStorage\Database\Query\Builder($this->db))
+            ->setPrefix($this->db->getPrefix())
+            ->select('*')
+            ->from($this->table)
+            ->where($this->primaryField, '=', $primaryKey);
+
+        $sth = $this->db->prepare($query->toSql())->execute();
+
+        return $this->populate($sth->fetchAll());
     }
 
     /**
-     * Find all.
+     * Get primary field.
+     *
+     * @return string
      *
      * @since  1.0.0
      * @author Dennis Eichhorn <d.eichhorn@oms.com>
      */
-    public function findAll()
-    {
-    }
-
-    public function getPrimaryField()
+    public function getPrimaryField() : string
     {
         return $this->primaryField;
     }
 
-    public function getTable()
+    /**
+     * Get main table.
+     *
+     * @return string
+     *
+     * @since  1.0.0
+     * @author Dennis Eichhorn <d.eichhorn@oms.com>
+     */
+    public function getTable() : string
     {
         return $this->table;
     }
